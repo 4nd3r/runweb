@@ -1,6 +1,4 @@
-const { app, BrowserWindow } = require( 'electron' )
-
-const shell = require( 'electron' ).shell
+const { app, BrowserWindow, shell } = require( 'electron' )
 
 function run()
 {
