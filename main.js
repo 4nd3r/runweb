@@ -25,6 +25,10 @@ function run()
         event.preventDefault()
         shell.openExternal( url )
     })
+
+    win.on( 'close', function() {
+        win = null
+    })
 }
 
 app.on( 'ready', run )
