@@ -2,6 +2,8 @@
 
 run website as app
 
+works for me, no support, no warranty
+
 ```
 apt install nodejs npm
 cd ~/Desktop
