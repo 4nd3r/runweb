@@ -1,12 +1,15 @@
-(() => {
-	class CustomNotification extends window.Notification {
-		constructor(params) {
-			super(params);
+(() =>
+{
+    class CustomNotification extends window.Notification
+    {
+        constructor( title, options )
+        {
+            super( title, options )
+            console.log( 'notification title: ' + title )
+            console.log( 'notification options: ' + options )
+        }
+    }
 
-			console.log(...params);
-		}
-	}
+    window.Notification = CustomNotification;
 
-	window.Notification = CustomNotification;
-})(this);
-
+})( this )

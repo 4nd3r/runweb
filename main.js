@@ -16,7 +16,7 @@ function run()
         minHeight: 600,
         autoHideMenuBar: true,
         webPreferences: {
-            preload: resolve( __dirname, 'notification.js' )
+            preload: resolve( __dirname, 'preload.js' )
         }
     })
 
