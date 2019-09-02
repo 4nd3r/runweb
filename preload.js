@@ -1,15 +1,17 @@
+const { ipcRenderer } = require( 'electron' );
+
 (() =>
 {
     class CustomNotification extends window.Notification
     {
         constructor( title, options )
         {
-            super( title, options )
-            console.log( 'notification title: ' + title )
-            console.log( 'notification options: ' + options )
+            super( title, options );
+            console.log( 'Notification!' );
+            ipcRenderer.send( 'notification', 'Beep!' );
         }
     }
 
-    window.Notification = CustomNotification
+    window.Notification = CustomNotification;
 
-})( this )
+})( this );

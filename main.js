@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell } = require( 'electron' )
+const { app, BrowserWindow, ipcMain, shell } = require( 'electron' )
 const { resolve } = require( 'path' )
 
 function run()
@@ -16,6 +16,7 @@ function run()
         minHeight: 600,
         autoHideMenuBar: true,
         webPreferences: {
+            nodeIntegration: true,
             preload: resolve( __dirname, 'preload.js' )
         }
     })
@@ -32,6 +33,10 @@ function run()
 
     win.on( 'close', function() {
         win = null
+    })
+
+    ipcMain.on( 'notification', (event, arg) => {
+        console.log( arg )
     })
 }
 
