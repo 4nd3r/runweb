@@ -6,6 +6,7 @@
         "start": "electron --no-sandbox ."
     },
     "dependencies": {
-        "electron": "^6"
+        "electron": "^6",
+        "prettier": "^1.18.2"
     }
 }

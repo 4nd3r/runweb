@@ -1,5 +1,4 @@
 const { app, BrowserWindow, ipcMain, shell } = require( 'electron' )
-const { resolve } = require( 'path' )
 
 function run()
 {
@@ -14,11 +13,7 @@ function run()
     let win = new BrowserWindow({
         minWidth: 800,
         minHeight: 600,
-        autoHideMenuBar: true,
-        webPreferences: {
-            nodeIntegration: true,
-            preload: resolve( __dirname, 'preload.js' )
-        }
+        autoHideMenuBar: true
     })
 
     console.log( 'load URL: ' + url )
@@ -33,10 +28,6 @@ function run()
 
     win.on( 'close', function() {
         win = null
-    })
-
-    ipcMain.on( 'notification', (event, arg) => {
-        console.log( arg )
     })
 }
 
