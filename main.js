@@ -1,4 +1,5 @@
 const { app, BrowserWindow, shell } = require( 'electron' )
+const { resolve } = require( 'path' )
 
 function run()
 {
@@ -13,7 +14,10 @@ function run()
     let win = new BrowserWindow({
         minWidth: 800,
         minHeight: 600,
-        autoHideMenuBar: true
+        autoHideMenuBar: true,
+        webPreferences: {
+        	preload: resolve( __dirname, 'notification.js' )
+        }
     })
 
     console.log( 'load URL: ' + url )
