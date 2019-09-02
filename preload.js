@@ -10,6 +10,6 @@
         }
     }
 
-    window.Notification = CustomNotification;
+    window.Notification = CustomNotification
 
 })( this )
