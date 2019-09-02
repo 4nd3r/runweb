@@ -13,6 +13,7 @@ function run()
     let win = new BrowserWindow({
         minWidth: 800,
         minHeight: 600,
+        backgroundColor: '#fff',
         autoHideMenuBar: true,
         webPreferences: {
             partition: 'persist:' + ( new URL( url ) ).hostname
