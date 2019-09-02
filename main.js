@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell } = require( 'electron' )
+const { app, BrowserWindow, shell } = require( 'electron' )
 
 function run()
 {
