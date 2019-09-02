@@ -13,7 +13,10 @@ function run()
     let win = new BrowserWindow({
         minWidth: 800,
         minHeight: 600,
-        autoHideMenuBar: true
+        autoHideMenuBar: true,
+        webPreferences: {
+            partition: 'persist:' + ( new URL( url ) ).hostname
+        }
     })
 
     console.log( 'load URL: ' + url )
