@@ -1,4 +1,5 @@
 const { app, BrowserWindow, shell } = require( 'electron' )
+const contextMenu = require( 'electron-context-menu' )
 
 function run()
 {
@@ -22,6 +23,7 @@ function run()
 
     console.log( 'load URL: ' + url )
     win.loadURL( url )
+    contextMenu()
 
     win.webContents.on( 'new-window', function( event, url )
     {
