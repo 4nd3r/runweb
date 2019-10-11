@@ -1,12 +1,24 @@
 {
     "name": "runweb",
-    "version": "0.0.1",
+    "version": "1.0.0",
+    "description": "run website as app",
+    "author": "Ander Punnar <ander@kvlt.ee>",
     "main": "main.js",
     "scripts": {
-        "start": "electron --no-sandbox ."
+        "start": "electron --no-sandbox .",
+        "mkdeb": "electron-builder build --linux deb"
+    },
+    "devDependencies": {
+        "electron": "^6",
+        "electron-builder": "^21"
     },
     "dependencies": {
-        "electron": "^6",
         "electron-context-menu": "^0.15"
+    },
+    "build": {
+        "deb": {
+            "afterInstall": "build-deb-postinst.sh",
+            "afterRemove": "build-deb-postrm.sh"
+        }
     }
 }
