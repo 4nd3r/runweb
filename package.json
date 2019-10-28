@@ -6,8 +6,7 @@
     "main": "main.js",
     "scripts": {
         "start": "electron --no-sandbox .",
-        "mkdeb": "electron-builder build --linux deb",
-        "mkrpm": "electron-builder build --linux rpm"
+        "mkdeb": "electron-builder build --linux deb"
     },
     "devDependencies": {
         "electron": "^6",
