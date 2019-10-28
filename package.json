@@ -1,6 +1,6 @@
 {
     "name": "runweb",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "run website as app",
     "author": "Ander Punnar <ander@kvlt.ee>",
     "main": "main.js",
@@ -9,8 +9,8 @@
         "mkdeb": "electron-builder build --linux deb"
     },
     "devDependencies": {
-        "electron": "^6",
-        "electron-builder": "^21"
+        "electron": "^7",
+        "electron-builder": "^22"
     },
     "dependencies": {
         "electron-context-menu": "^0.15"
