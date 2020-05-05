@@ -1,5 +1,6 @@
 const { app, BrowserWindow, shell } = require( 'electron' )
 const contextMenu = require( 'electron-context-menu' )
+const path = require( 'path' )
 
 function run()
 {
@@ -17,7 +18,8 @@ function run()
         backgroundColor: '#fff',
         autoHideMenuBar: true,
         webPreferences: {
-            partition: 'persist:' + ( new URL( url ) ).hostname
+            partition: 'persist:' + ( new URL( url ) ).hostname,
+            preload: path.join( __dirname, 'preload.js' )
         }
     })
 
@@ -30,6 +32,12 @@ function run()
         console.log( 'open external URL: ' + url )
         event.preventDefault()
         shell.openExternal( url )
+    })
+
+    win.webContents.on( 'console-message', function( event, level, message )
+    {
+        if ( message == 'I\'d just like to interject for a moment.' )
+            shell.beep()
     })
 
     win.on( 'close', function() {
