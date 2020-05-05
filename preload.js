@@ -1,7 +1,10 @@
-OriginalNotification = window.Notification
-
-window.Notification = function( title, options )
+class runwebNotification extends Notification
 {
-    console.log( 'I\'d just like to interject for a moment.' )
-    return new OriginalNotification( title, options )
+    constructor( title, options )
+    {
+        super( title, options )
+        console.log( 'I\'d just like to interject for a moment.' )
+    }
 }
+
+window.Notification = runwebNotification
