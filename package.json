@@ -16,6 +16,9 @@
         "electron-context-menu": "^0.16"
     },
     "build": {
+        "linux": {
+            "category": "Utility"
+        },
         "deb": {
             "afterInstall": "build-deb-postinst.sh",
             "afterRemove": "build-deb-postrm.sh"
