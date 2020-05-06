@@ -1,6 +1,6 @@
 {
     "name": "runweb",
-    "version": "1.2.3",
+    "version": "1.2.5",
     "description": "run website as app",
     "author": "Ander Punnar <ander@kvlt.ee>",
     "main": "main.js",
@@ -9,15 +9,18 @@
         "prettier": "prettier --write *.js",
         "mkdeb": "electron-builder build --linux deb"
     },
+    "dependencies": {
+        "electron-context-menu": "^2"
+    },
     "devDependencies": {
         "electron": "^8",
         "electron-builder": "^22",
         "prettier": "^2"
     },
-    "dependencies": {
-        "electron-context-menu": "^2"
-    },
     "build": {
+        "directories": {
+            "buildResources": "./"
+        },
         "linux": {
             "category": "Utility"
         },
