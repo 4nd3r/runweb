@@ -38,7 +38,7 @@ function run()
     win.webContents.on( 'page-title-updated', function( event, title )
     {
         event.preventDefault()
-        title = '[ runweb @ ' + hostname + ' ] ' + title
+        title = '[runweb@' + hostname + '] ' + title
         console.log( 'RUNWEB TITLE: ' + title )
         win.setTitle( title )
     })
