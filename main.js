@@ -30,6 +30,14 @@ function run()
     win.loadURL( url )
     contextMenu()
 
+    win.webContents.on( 'page-title-updated', function( event, title )
+    {
+        event.preventDefault()
+        title = '[ runweb @ ' + hostname + ' ] ' + title
+        console.log( 'RUNWEB TITLE: ' + title )
+        win.setTitle( title )
+    })
+
     win.webContents.on( 'new-window', function( event, url )
     {
         console.log( 'RUNWEB EXTERNAL: ' + url )
