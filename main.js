@@ -40,7 +40,10 @@ function run()
     win.webContents.on( 'console-message', function( event, level, message )
     {
         if ( message == 'I\'d just like to interject for a moment.' )
+        {
+            console.log( 'RUNWEB NOTIFICATION' )
             win.flashFrame( true )
+        }
     })
 
     win.on( 'close', function() {
