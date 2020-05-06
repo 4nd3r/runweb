@@ -8,9 +8,12 @@ function run()
 
     if ( ! url.match( /^https?:\/\// ) )
     {
-        console.log( 'missing URL' )
+        console.log( 'RUNWEB MISSING URL' )
         process.exit()
     }
+
+    let hostname = ( new URL( url ) ).hostname
+    console.log( 'RUNWEB HOSTNAME: ' + hostname )
 
     let win = new BrowserWindow({
         minWidth: 800,
@@ -18,18 +21,18 @@ function run()
         backgroundColor: '#fff',
         autoHideMenuBar: true,
         webPreferences: {
-            partition: 'persist:' + ( new URL( url ) ).hostname,
+            partition: 'persist:' + hostname,
             preload: path.join( __dirname, 'preload.js' )
         }
     })
 
-    console.log( 'load URL: ' + url )
+    console.log( 'RUNWEB LOAD URL: ' + url )
     win.loadURL( url )
     contextMenu()
 
     win.webContents.on( 'new-window', function( event, url )
     {
-        console.log( 'open external URL: ' + url )
+        console.log( 'RUNWEB OPEN EXTERNAL URL: ' + url )
         event.preventDefault()
         shell.openExternal( url )
     })
