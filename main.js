@@ -26,13 +26,13 @@ function run()
         }
     })
 
-    console.log( 'RUNWEB LOAD URL: ' + url )
+    console.log( 'RUNWEB LOAD: ' + url )
     win.loadURL( url )
     contextMenu()
 
     win.webContents.on( 'new-window', function( event, url )
     {
-        console.log( 'RUNWEB OPEN EXTERNAL URL: ' + url )
+        console.log( 'RUNWEB EXTERNAL: ' + url )
         event.preventDefault()
         shell.openExternal( url )
     })
