@@ -1,8 +1,10 @@
 # runweb
 
-run website as app
+Run website like an app.
 
-works for me, no support, no warranty
+I use it with tiling window manager.
+
+Works for me, no support, no warranty.
 
 ```
 sudo apt install nodejs npm
