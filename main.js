@@ -14,6 +14,7 @@ function run() {
     console.log('RUNWEB HOSTNAME: ' + hostname);
 
     let win = new BrowserWindow({
+        icon: path.join(__dirname, 'icon.png'),
         minWidth: 800,
         minHeight: 600,
         backgroundColor: '#fff',
