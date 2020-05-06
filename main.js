@@ -28,7 +28,12 @@ function run()
 
     console.log( 'RUNWEB LOAD: ' + url )
     win.loadURL( url )
-    contextMenu()
+
+    contextMenu({
+        prepend: (defaultActions, params, browserWindow) => [
+            { label: 'Reload', click: () => { win.reload() } }
+        ]
+    })
 
     win.webContents.on( 'page-title-updated', function( event, title )
     {

@@ -1,6 +1,6 @@
 {
     "name": "runweb",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "run website as app",
     "author": "Ander Punnar <ander@kvlt.ee>",
     "main": "main.js",
@@ -13,7 +13,7 @@
         "electron-builder": "^22"
     },
     "dependencies": {
-        "electron-context-menu": "^0.16"
+        "electron-context-menu": "^2"
     },
     "build": {
         "linux": {
