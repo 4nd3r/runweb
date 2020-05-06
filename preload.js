@@ -1,12 +1,10 @@
-const { ipcRenderer } = require('electron')
+const { ipcRenderer } = require('electron');
 
-class runwebNotification extends Notification
-{
-    constructor( title, options )
-    {
-        super( title, options )
-        ipcRenderer.send('flashFrame')
-    }
+class runwebNotification extends Notification {
+  constructor(title, options) {
+    super(title, options);
+    ipcRenderer.send('flashFrame');
+  }
 }
 
-window.Notification = runwebNotification
+window.Notification = runwebNotification;
