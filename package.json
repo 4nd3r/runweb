@@ -10,7 +10,8 @@
     },
     "devDependencies": {
         "electron": "^8",
-        "electron-builder": "^22"
+        "electron-builder": "^22",
+        "prettier": "^2"
     },
     "dependencies": {
         "electron-context-menu": "^2"
@@ -23,5 +24,11 @@
             "afterInstall": "build-deb-postinst.sh",
             "afterRemove": "build-deb-postrm.sh"
         }
+    },
+    "prettier": {
+        "singleQuote": true,
+        "printWidth": 120,
+        "trailingComma": "none",
+        "semi": true
     }
 }
