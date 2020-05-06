@@ -1,9 +1,11 @@
+const { ipcRenderer } = require('electron')
+
 class runwebNotification extends Notification
 {
     constructor( title, options )
     {
         super( title, options )
-        console.log( 'I\'d just like to interject for a moment.' )
+        ipcRenderer.send('flashFrame')
     }
 }
 

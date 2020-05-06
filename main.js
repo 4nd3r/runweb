@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell } = require( 'electron' )
+const { app, BrowserWindow, shell, ipcMain } = require( 'electron' )
 const contextMenu = require( 'electron-context-menu' )
 const path = require( 'path' )
 
@@ -50,17 +50,13 @@ function run()
         shell.openExternal( url )
     })
 
-    win.webContents.on( 'console-message', function( event, level, message )
-    {
-        if ( message == 'I\'d just like to interject for a moment.' )
-        {
-            console.log( 'RUNWEB NOTIFICATION' )
-            win.flashFrame( true )
-        }
-    })
-
     win.on( 'close', function() {
         win = null
+    })
+
+    ipcMain.on('flashFrame', (event) => {
+        console.log( 'RUNWEB NOTIFICATION' )
+        win.flashFrame( true )
     })
 }
 
