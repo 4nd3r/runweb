@@ -40,8 +40,8 @@ function run()
 
     win.webContents.on( 'new-window', function( event, url )
     {
-        console.log( 'RUNWEB EXTERNAL: ' + url )
         event.preventDefault()
+        console.log( 'RUNWEB EXTERNAL: ' + url )
         shell.openExternal( url )
     })
 
