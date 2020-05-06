@@ -1,6 +1,6 @@
 {
     "name": "runweb",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "description": "run website as app",
     "author": "Ander Punnar <ander@kvlt.ee>",
     "main": "main.js",
