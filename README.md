@@ -2,7 +2,7 @@
 
 Run website like an app.
 
-I use it with tiling window manager.
+I use it with tiling window manager on Linux.
 
 Works for me, no support, no warranty.
 
