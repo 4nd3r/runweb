@@ -4,9 +4,9 @@ const path = require('path');
 
 console.log(app.name + ' ' + app.getVersion());
 console.log('electron ' + process.versions.electron);
-console.log('')
+console.log('');
 
-function run() {
+app.on('ready', () => {
     let url = process.argv[process.argv.length - 1];
 
     if (!url.match(/^https?:\/\//)) {
@@ -47,27 +47,25 @@ function run() {
         ]
     });
 
-    win.webContents.on('page-title-updated', function (event, title) {
+    win.webContents.on('page-title-updated', (event, title) => {
         event.preventDefault();
         title = '[runweb@' + hostname + '] ' + title;
         console.log('RUNWEB TITLE: ' + title);
         win.setTitle(title);
     });
 
-    win.webContents.on('new-window', function (event, url) {
+    win.webContents.on('new-window', (event, url) => {
         event.preventDefault();
         console.log('RUNWEB EXTERNAL: ' + url);
         shell.openExternal(url);
     });
 
-    win.on('close', function () {
+    win.on('close', () => {
         win = null;
     });
 
-    ipcMain.on('flashFrame', (event) => {
+    ipcMain.on('flashFrame', () => {
         console.log('RUNWEB NOTIFICATION');
         win.flashFrame(true);
     });
-}
-
-app.on('ready', run);
+});
