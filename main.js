@@ -36,17 +36,6 @@ app.on('ready', () => {
     console.log('RUNWEB LOAD: ' + url);
     win.loadURL(url);
 
-    contextMenu({
-        prepend: (defaultActions, params, browserWindow) => [
-            {
-                label: 'Reload',
-                click: () => {
-                    win.reload();
-                }
-            }
-        ]
-    });
-
     win.webContents.on('page-title-updated', (event, title) => {
         event.preventDefault();
         title = '[runweb@' + hostname + '] ' + title;
@@ -67,5 +56,16 @@ app.on('ready', () => {
     ipcMain.on('flashFrame', () => {
         console.log('RUNWEB NOTIFICATION');
         win.flashFrame(true);
+    });
+
+    contextMenu({
+        prepend: (defaultActions, params, browserWindow) => [
+            {
+                label: 'Reload',
+                click: () => {
+                    win.reload();
+                }
+            }
+        ]
     });
 });
