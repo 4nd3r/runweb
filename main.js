@@ -25,6 +25,10 @@ function run() {
         }
     });
 
+    let ua = win.webContents.userAgent.replace(/Electron\/[0-9\.]+\s/, '');
+    console.log('RUNWEB UA: ' + ua);
+    win.webContents.userAgent = ua;
+
     console.log('RUNWEB LOAD: ' + url);
     win.loadURL(url);
 
