@@ -2,11 +2,15 @@ const { app, BrowserWindow, shell, ipcMain } = require('electron');
 const contextMenu = require('electron-context-menu');
 const path = require('path');
 
+console.log(app.name + ' ' + app.getVersion());
+console.log('electron ' + process.versions.electron);
+console.log('')
+
 function run() {
     let url = process.argv[process.argv.length - 1];
 
     if (!url.match(/^https?:\/\//)) {
-        console.log('RUNWEB MISSING URL');
+        console.log('Usage: runweb [options...] <url>');
         process.exit();
     }
 
