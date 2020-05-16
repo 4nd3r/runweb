@@ -1,6 +1,6 @@
 {
     "name": "runweb",
-    "version": "1.3.1",
+    "version": "1.3.2",
     "description": "Run website like an app.",
     "author": "Ander Punnar <ander@kvlt.ee>",
     "license": "WTFPL",
