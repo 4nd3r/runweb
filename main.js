@@ -2,15 +2,15 @@ const { app, BrowserWindow, shell, ipcMain } = require('electron');
 const contextMenu = require('electron-context-menu');
 const path = require('path');
 
-console.log(app.name + ' ' + app.getVersion());
-console.log('electron ' + process.versions.electron);
-console.log('');
+console.log(app.name + ': ' + app.getVersion());
+console.log('electron: ' + process.versions.electron);
+console.log('data: ' + app.getPath('userData'));
 
 app.on('ready', () => {
     let url = process.argv[process.argv.length - 1];
 
     if (!url.match(/^https?:\/\//)) {
-        console.log('Usage: runweb [options...] <url>');
+        console.log('usage: runweb <url>');
         process.exit();
     }
 
