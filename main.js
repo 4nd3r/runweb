@@ -25,7 +25,8 @@ app.on('ready', () => {
         autoHideMenuBar: true,
         webPreferences: {
             partition: 'persist:' + hostname,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            spellcheck: false
         }
     });
 
