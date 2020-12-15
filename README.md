@@ -11,10 +11,7 @@ Works for me. No support. No warranty. PRs welcome.
 sudo apt install nodejs npm
 git clone https://github.com/4nd3r/runweb
 cd runweb
-npm install
-npm run mkdeb
-sudo dpkg -i dist/*.deb
-sudo apt install -f
+make
 runweb https://example.com
 ```
 
