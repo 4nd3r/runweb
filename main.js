@@ -17,6 +17,14 @@ app.on('ready', () => {
     let hostname = new URL(url).hostname;
     console.log('RUNWEB HOSTNAME: ' + hostname);
 
+    let sc = false;
+
+    if ('RUNWEB_SC' in process.env) {
+        sc = true;
+    }
+
+    console.log('RUNWEB SPELLCHECK: ' + sc);
+
     let win = new BrowserWindow({
         icon: path.join(__dirname, 'icon.png'),
         minWidth: 800,
@@ -26,7 +34,7 @@ app.on('ready', () => {
         webPreferences: {
             partition: 'persist:' + hostname,
             preload: path.join(__dirname, 'preload.js'),
-            spellcheck: false
+            spellcheck: sc
         }
     });
 
