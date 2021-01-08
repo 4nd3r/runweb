@@ -31,6 +31,11 @@ app.on('ready', () => {
     });
 
     let ua = win.webContents.userAgent.replace(/Electron\/[0-9\.]+\s/, '');
+
+    if ('RUNWEB_UA' in process.env) {
+        ua = process.env.RUNWEB_UA;
+    }
+
     console.log('RUNWEB UA: ' + ua);
     win.webContents.userAgent = ua;
 
