@@ -1,6 +1,6 @@
 {
     "name": "runweb",
-    "version": "1.7.0",
+    "version": "1.8.0",
     "description": "Run website like an app.",
     "author": "Ander Punnar <ander@kvlt.ee>",
     "license": "WTFPL",
@@ -11,12 +11,12 @@
         "mkdeb": "electron-builder build --linux deb"
     },
     "dependencies": {
-        "electron-context-menu": "^2.5"
+        "electron-context-menu": "^3.1"
     },
     "devDependencies": {
-        "electron": "^12",
-        "electron-builder": "^22.10",
-        "prettier": "^2.2"
+        "electron": "^13",
+        "electron-builder": "^22.11",
+        "prettier": "^2.3"
     },
     "build": {
         "directories": {
