@@ -8,7 +8,7 @@ Works for me. No support. No warranty. PRs welcome.
 
 ## Build & Install
 ```
-sudo apt install nodejs npm
+sudo apt install nodejs yarnpkg
 git clone https://github.com/4nd3r/runweb
 cd runweb
 make
