@@ -15,7 +15,16 @@ app.on('ready', () => {
     }
 
     let hostname = new URL(url).hostname;
+
     console.log('RUNWEB HOSTNAME: ' + hostname);
+
+    let partition = hostname;
+
+    if ('RUNWEB_PARTITION' in process.env) {
+        partition = process.env.RUNWEB_PARTITION;
+    }
+
+    console.log('RUNWEB PARTITION: ' + partition);
 
     let sc = false;
 
@@ -32,7 +41,7 @@ app.on('ready', () => {
         backgroundColor: '#fff',
         autoHideMenuBar: true,
         webPreferences: {
-            partition: 'persist:' + hostname,
+            partition: 'persist:' + partition,
             preload: path.join(__dirname, 'preload.js'),
             spellcheck: sc
         }
