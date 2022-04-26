@@ -41,6 +41,7 @@ app.on('ready', () => {
         backgroundColor: '#fff',
         autoHideMenuBar: true,
         webPreferences: {
+            contextIsolation: false,
             partition: 'persist:' + partition,
             preload: path.join(__dirname, 'preload.js'),
             spellcheck: sc
