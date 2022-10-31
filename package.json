@@ -14,7 +14,7 @@
         "electron-context-menu": "latest"
     },
     "devDependencies": {
-        "electron": "latest",
+        "electron": "19",
         "electron-builder": "latest",
         "prettier": "latest"
     },
