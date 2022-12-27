@@ -68,10 +68,10 @@ app.on('ready', () => {
         win.setTitle(title);
     });
 
-    win.webContents.on('new-window', (event, url) => {
-        event.preventDefault();
+    win.webContents.setWindowOpenHandler(({ url }) => {
         console.log('RUNWEB EXTERNAL: ' + url);
         shell.openExternal(url);
+        return { action: 'deny' };
     });
 
     win.on('close', () => {
