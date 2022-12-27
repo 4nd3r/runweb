@@ -1,6 +1,6 @@
 {
     "name": "runweb",
-    "version": "1.11.1",
+    "version": "1.11.2",
     "description": "Run website like an app.",
     "author": "Ander Punnar <ander@kvlt.ee>",
     "license": "WTFPL",
@@ -14,7 +14,7 @@
         "electron-context-menu": "latest"
     },
     "devDependencies": {
-        "electron": "19",
+        "electron": "latest",
         "electron-builder": "latest",
         "prettier": "latest"
     },

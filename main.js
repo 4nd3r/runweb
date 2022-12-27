@@ -44,6 +44,7 @@ app.on('ready', () => {
             contextIsolation: false,
             partition: 'persist:' + partition,
             preload: path.join(__dirname, 'preload.js'),
+            sandbox: false,
             spellcheck: sc
         }
     });
