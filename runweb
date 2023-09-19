@@ -14,21 +14,23 @@ from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 class RunWebApp(QApplication):
     def __init__(self, args):
-        super().__init__([args.profile, "runweb"])
+        super().__init__([args.profile or "otr", "runweb"])
         self.setApplicationName("runweb")
         signal.signal(signal.SIGINT, signal.SIG_DFL)
         webenginecontext_log = QLoggingCategory("qt.webenginecontext")
         webenginecontext_log.setFilterRules("*.info=false")
         self.profile = RunWebProfile(args.profile)
         self.url = QUrl(args.url)
+        print("url", args.url)
 
 
 class RunWebProfile(QWebEngineProfile):
     def __init__(self, name):
         super().__init__(name)
+        print("profile", name)
         print("otr", self.isOffTheRecord())
-        print("cache", None if self.isOffTheRecord() else self.cachePath())
-        print("data", self.persistentStoragePath())
+        print("cache", self.cachePath() or None)
+        print("data", self.persistentStoragePath() or None)
 
 
 class RunWebPage(QWebEnginePage):
@@ -39,15 +41,18 @@ class RunWebPage(QWebEnginePage):
         self.newWindowRequested.connect(self.onNewWindow)
     def onNewWindow(self, request):
         url = request.requestedUrl()
+        print("window", url.url())
         if not self.openExternalUrl(url):
             self.setUrl(url)
     def openExternalUrl(self, url):
         if url.host() == self.url().host():
             return False
+        print("xdg-open", url.url())
         subprocess.Popen(["xdg-open", url.url()])
         return True
     def acceptNavigationRequest(self, url, navigationType, isMainFrame):
         if navigationType == QWebEnginePage.NavigationType.NavigationTypeLinkClicked:
+            print("click", url.url())
             if self.openExternalUrl(url):
                 return False
         return super().acceptNavigationRequest(url, navigationType, isMainFrame)
@@ -64,9 +69,14 @@ class RunWebView(QWebEngineView):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-p", dest="profile", default=None)
-    parser.add_argument("url")
+    parser = argparse.ArgumentParser(description="Run website like an app.")
+    parser.add_argument(
+        "-p",
+        dest="profile",
+        metavar="NAME",
+        default=None,
+        help="name of persistent profile")
+    parser.add_argument("url", metavar="URL")
     args = parser.parse_args()
     app = RunWebApp(args)
     page = RunWebPage(app.profile, app.url)

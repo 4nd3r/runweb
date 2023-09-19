@@ -1,5 +1,12 @@
-# runweb
+```
+usage: runweb [-h] [-p NAME] URL
 
 Run website like an app.
 
-Works for me on Debian Sid with a tiling window manager.
+positional arguments:
+  URL
+
+options:
+  -h, --help  show this help message and exit
+  -p NAME     name of persistent profile
+```
