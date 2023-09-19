@@ -1,62 +1,78 @@
 #!/usr/bin/env python3
 
+# pylint: disable=C0103,C0111,C0209,E0611,R0903,R1732,W0621
+
 import argparse
 import signal
 import subprocess
 import sys
 
-from PyQt6.QtCore import QLoggingCategory, QUrl
+from PyQt6.QtCore import QUrl
 from PyQt6.QtWidgets import QApplication
-from PyQt6.QtWebEngineCore import QWebEnginePage, QWebEngineProfile
+from PyQt6.QtWebEngineCore import QWebEnginePage, QWebEngineProfile, QWebEngineSettings
 from PyQt6.QtWebEngineWidgets import QWebEngineView
+
+
+APP = "runweb"
+
+
+def log(*log):
+    print(": ".join(map(str, list((APP,) + log))))
 
 
 class RunWebApp(QApplication):
     def __init__(self, args):
-        super().__init__([args.profile or "otr", "runweb"])
-        self.setApplicationName("runweb")
+        super().__init__([args.profile or "otr", APP])
+        self.setApplicationName(APP)
         signal.signal(signal.SIGINT, signal.SIG_DFL)
-        webenginecontext_log = QLoggingCategory("qt.webenginecontext")
-        webenginecontext_log.setFilterRules("*.info=false")
         self.profile = RunWebProfile(args.profile)
         self.url = QUrl(args.url)
-        print("url", args.url)
+        log("url", args.url)
 
 
 class RunWebProfile(QWebEngineProfile):
     def __init__(self, name):
         super().__init__(name)
-        print("profile", name)
-        print("otr", self.isOffTheRecord())
-        print("cache", self.cachePath() or None)
-        print("data", self.persistentStoragePath() or None)
+        log("profile", name)
+        log("otr", self.isOffTheRecord())
+        log("cache", self.cachePath() or None)
+        log("data", self.persistentStoragePath() or None)
+        self.setNotificationPresenter(self.notify)
+    def notify(self, notification):
+        log("notification")
+        message = "{}:\n{}".format(notification.title(), notification.message())
+        subprocess.Popen(["notify-send", self.storageName() or APP, message])
 
 
 class RunWebPage(QWebEnginePage):
     def __init__(self, profile, url):
         super().__init__(profile)
-        for feature in [self.Feature.Notifications]:
+        for webattr in [
+            [QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture, False]
+        ]:
+            self.settings().setAttribute(*webattr)
+        for feature in [
+            self.Feature.Notifications
+        ]:
             self.setFeaturePermission(url, feature, self.PermissionPolicy.PermissionGrantedByUser)
         self.newWindowRequested.connect(self.onNewWindow)
     def onNewWindow(self, request):
         url = request.requestedUrl()
-        print("window", url.url())
+        log("window", url.url())
         if not self.openExternalUrl(url):
             self.setUrl(url)
     def openExternalUrl(self, url):
         if url.host() == self.url().host():
             return False
-        print("xdg-open", url.url())
+        log("xdg-open", url.url())
         subprocess.Popen(["xdg-open", url.url()])
         return True
     def acceptNavigationRequest(self, url, navigationType, isMainFrame):
         if navigationType == QWebEnginePage.NavigationType.NavigationTypeLinkClicked:
-            print("click", url.url())
+            log("click", url.url())
             if self.openExternalUrl(url):
                 return False
         return super().acceptNavigationRequest(url, navigationType, isMainFrame)
-    def javaScriptConsoleMessage(*_):
-        return
 
 
 class RunWebView(QWebEngineView):
