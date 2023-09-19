@@ -14,9 +14,9 @@ from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 class RunWebApp(QApplication):
     def __init__(self, args):
-        super().__init__([])
-        signal.signal(signal.SIGINT, signal.SIG_DFL)
+        super().__init__([args.profile, "runweb"])
         self.setApplicationName("runweb")
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
         webenginecontext_log = QLoggingCategory("qt.webenginecontext")
         webenginecontext_log.setFilterRules("*.info=false")
         self.profile = RunWebProfile(args.profile)
@@ -54,6 +54,8 @@ class RunWebView(QWebEngineView):
     def __init__(self, page):
         super().__init__()
         self.setPage(page)
+        self.iconChanged.connect(lambda: self.setWindowIcon(self.icon()))
+        self.titleChanged.connect(lambda: self.setWindowTitle(self.title()))
 
 
 if __name__ == "__main__":
