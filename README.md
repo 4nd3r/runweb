@@ -5,7 +5,7 @@ $ chmod +x "$HOME/.local/bin/runweb"
 $ runweb -h
 usage: runweb [-h] [-p NAME] URL
 
-Run website like an app.
+run website like an app
 
 positional arguments:
   URL

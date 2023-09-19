@@ -68,7 +68,7 @@ class RunWebView(QWebEngineView):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run website like an app.")
+    parser = argparse.ArgumentParser(description="run website like an app")
     parser.add_argument(
         "-p",
         dest="profile",
