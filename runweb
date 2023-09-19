@@ -8,9 +8,9 @@ import subprocess
 import sys
 
 from PyQt6.QtCore import QUrl
-from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWebEngineCore import QWebEnginePage, QWebEngineProfile, QWebEngineSettings
 from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PyQt6.QtWidgets import QApplication
 
 
 APP = "runweb"
@@ -55,6 +55,7 @@ class RunWebPage(QWebEnginePage):
             self.Feature.Notifications
         ]:
             self.setFeaturePermission(url, feature, self.PermissionPolicy.PermissionGrantedByUser)
+        self.setBackgroundColor(0)
         self.newWindowRequested.connect(self.onNewWindow)
     def onNewWindow(self, request):
         url = request.requestedUrl()
