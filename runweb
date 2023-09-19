@@ -26,28 +26,33 @@ class RunWebApp(QApplication):
 class RunWebProfile(QWebEngineProfile):
     def __init__(self, name):
         super().__init__(name)
-        print("RunWebProfile.otr:", self.isOffTheRecord())
-        print("RunWebProfile.cache:", None if self.isOffTheRecord() else self.cachePath())
-        print("RunWebProfile.data:", self.persistentStoragePath())
+        print("otr", self.isOffTheRecord())
+        print("cache", None if self.isOffTheRecord() else self.cachePath())
+        print("data", self.persistentStoragePath())
 
 
 class RunWebPage(QWebEnginePage):
     def __init__(self, profile, url):
         super().__init__(profile)
-        self.url = url
         for feature in [self.Feature.Notifications]:
             self.setFeaturePermission(url, feature, self.PermissionPolicy.PermissionGrantedByUser)
+        self.newWindowRequested.connect(self.onNewWindow)
+    def onNewWindow(self, request):
+        url = request.requestedUrl()
+        if not self.openExternalUrl(url):
+            self.setUrl(url)
+    def openExternalUrl(self, url):
+        if url.host() == self.url().host():
+            return False
+        subprocess.Popen(["xdg-open", url.url()])
+        return True
+    def acceptNavigationRequest(self, url, navigationType, isMainFrame):
+        if navigationType == QWebEnginePage.NavigationType.NavigationTypeLinkClicked:
+            if self.openExternalUrl(url):
+                return False
+        return super().acceptNavigationRequest(url, navigationType, isMainFrame)
     def javaScriptConsoleMessage(*_):
         return
-    def acceptNavigationRequest(self, url, *_):
-        if url.host() == self.url.host():
-            print("RunWebPage.navigation:", url.url())
-            return super().acceptNavigationRequest(url, *_)
-        self.xdgOpen(url)
-        return False
-    def xdgOpen(self, url):
-        print("RunWebPage.xdgOpen:", url.url())
-        subprocess.Popen(["xdg-open", url.url()])
 
 
 class RunWebView(QWebEngineView):
@@ -66,6 +71,6 @@ if __name__ == "__main__":
     app = RunWebApp(args)
     page = RunWebPage(app.profile, app.url)
     view = RunWebView(page)
-    page.load(app.url)
+    page.setUrl(app.url)
     view.showMaximized()
     sys.exit(app.exec())
