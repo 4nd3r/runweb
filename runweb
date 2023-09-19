@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import signal
+import subprocess
+import sys
+
+from PyQt6.QtCore import QLoggingCategory, QUrl
+from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWebEngineCore import QWebEnginePage, QWebEngineProfile
+from PyQt6.QtWebEngineWidgets import QWebEngineView
+
+
+class RunWebApp(QApplication):
+    def __init__(self, args):
+        super().__init__([])
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
+        self.setApplicationName("runweb")
+        webenginecontext_log = QLoggingCategory("qt.webenginecontext")
+        webenginecontext_log.setFilterRules("*.info=false")
+        self.profile = RunWebProfile(args.profile)
+        self.url = QUrl(args.url)
+
+
+class RunWebProfile(QWebEngineProfile):
+    def __init__(self, name):
+        super().__init__(name)
+        print("RunWebProfile.otr:", self.isOffTheRecord())
+        print("RunWebProfile.cache:", None if self.isOffTheRecord() else self.cachePath())
+        print("RunWebProfile.data:", self.persistentStoragePath())
+
+
+class RunWebPage(QWebEnginePage):
+    def __init__(self, profile, url):
+        super().__init__(profile)
+        self.url = url
+        for feature in [self.Feature.Notifications]:
+            self.setFeaturePermission(url, feature, self.PermissionPolicy.PermissionGrantedByUser)
+    def javaScriptConsoleMessage(*_):
+        return
+    def acceptNavigationRequest(self, url, *_):
+        if url.host() == self.url.host():
+            print("RunWebPage.navigation:", url.url())
+            return super().acceptNavigationRequest(url, *_)
+        self.xdgOpen(url)
+        return False
+    def xdgOpen(self, url):
+        print("RunWebPage.xdgOpen:", url.url())
+        subprocess.Popen(["xdg-open", url.url()])
+
+
+class RunWebView(QWebEngineView):
+    def __init__(self, page):
+        super().__init__()
+        self.setPage(page)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p", dest="profile", default=None)
+    parser.add_argument("url")
+    args = parser.parse_args()
+    app = RunWebApp(args)
+    page = RunWebPage(app.profile, app.url)
+    view = RunWebView(page)
+    page.load(app.url)
+    view.showMaximized()
+    sys.exit(app.exec())
