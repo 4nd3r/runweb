@@ -40,8 +40,11 @@ class RunWebProfile(QWebEngineProfile):
         self.setNotificationPresenter(self.notify)
     def notify(self, notification):
         log("notification")
-        message = "{}:\n{}".format(notification.title(), notification.message())
-        subprocess.Popen(["notify-send", self.storageName() or APP, message])
+        subprocess.Popen([
+            "notify-send",
+            "{}: {}".format(self.storageName() or APP, notification.title()),
+            notification.message()
+        ])
 
 
 class RunWebPage(QWebEnginePage):
