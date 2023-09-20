@@ -58,7 +58,6 @@ class RunWebPage(QWebEnginePage):
             self.Feature.Notifications
         ]:
             self.setFeaturePermission(url, feature, self.PermissionPolicy.PermissionGrantedByUser)
-        self.setBackgroundColor(0)
         self.newWindowRequested.connect(self.onNewWindow)
     def onNewWindow(self, request):
         url = request.requestedUrl()
