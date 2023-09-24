@@ -38,7 +38,11 @@ class RunWebProfile(QWebEngineProfile):
         log("cache", self.cachePath() or None)
         log("data", self.persistentStoragePath() or None)
         self.setNotificationPresenter(self.notify)
+    view = None
     def notify(self, notification):
+        if view:
+            log("attention")
+            QApplication.alert(self.view)
         log("notification")
         subprocess.Popen([
             "notify-send",
@@ -84,6 +88,7 @@ class RunWebView(QWebEngineView):
         self.setPage(page)
         self.iconChanged.connect(lambda: self.setWindowIcon(self.icon()))
         self.titleChanged.connect(lambda: self.setWindowTitle(self.title()))
+        page.profile().view = self
 
 
 if __name__ == "__main__":
