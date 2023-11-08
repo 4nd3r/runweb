@@ -87,7 +87,7 @@ class RunWebView(QWebEngineView):
     def __init__(self, page):
         super().__init__()
         self.setPage(page)
-        self.setZoomFactor(float(os.getenv('RUNWEB_ZOOM_FACTOR', 1.0)))
+        self.setZoomFactor(float(os.getenv('RUNWEB_ZOOMFACTOR', 1.0)))
         self.iconChanged.connect(lambda: self.setWindowIcon(self.icon()))
         self.titleChanged.connect(lambda: self.setWindowTitle(self.title()))
         page.profile().view = self
