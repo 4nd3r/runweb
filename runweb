@@ -3,6 +3,7 @@
 # pylint: disable=C0103,C0111,C0209,E0611,R0903,R1732,W0621
 
 import argparse
+import os
 import signal
 import subprocess
 import sys
@@ -86,6 +87,7 @@ class RunWebView(QWebEngineView):
     def __init__(self, page):
         super().__init__()
         self.setPage(page)
+        self.setZoomFactor(float(os.getenv('RUNWEB_ZOOM_FACTOR', 1.0)))
         self.iconChanged.connect(lambda: self.setWindowIcon(self.icon()))
         self.titleChanged.connect(lambda: self.setWindowTitle(self.title()))
         page.profile().view = self
