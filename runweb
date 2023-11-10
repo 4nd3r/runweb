@@ -45,7 +45,7 @@ class RunWebProfile(QWebEngineProfile):
             log("attention")
             QApplication.alert(self.view)
         log("notification")
-        subprocess.Popen([
+        subprocess.run([
             "notify-send",
             "{}: {}".format(self.storageName() or APP, notification.title()),
             notification.message()
@@ -73,7 +73,7 @@ class RunWebPage(QWebEnginePage):
         if url.host() == self.url().host():
             return False
         log("xdg-open", url.url())
-        subprocess.Popen(["xdg-open", url.url()])
+        subprocess.run(["xdg-open", url.url()])
         return True
     def acceptNavigationRequest(self, url, navigationType, isMainFrame):
         if navigationType == QWebEnginePage.NavigationType.NavigationTypeLinkClicked:
