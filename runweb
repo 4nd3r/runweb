@@ -100,7 +100,7 @@ if __name__ == "__main__":
         dest="profile",
         metavar="NAME",
         default=None,
-        help="name of persistent profile")
+        help="persistent profile name")
     parser.add_argument("url", metavar="URL")
     args = parser.parse_args()
     app = RunWebApp(args)

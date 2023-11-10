@@ -12,5 +12,5 @@ positional arguments:
 
 options:
   -h, --help  show this help message and exit
-  -p NAME     name of persistent profile
+  -p NAME     persistent profile name
 ```
