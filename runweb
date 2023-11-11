@@ -39,7 +39,9 @@ class RunWebProfile(QWebEngineProfile):
         log("cache", self.cachePath() or None)
         log("data", self.persistentStoragePath() or None)
         self.setNotificationPresenter(self.notify)
+
     view = None
+
     def notify(self, notification):
         if view:
             log("attention")
@@ -48,7 +50,7 @@ class RunWebProfile(QWebEngineProfile):
         subprocess.run([
             "notify-send",
             "{}: {}".format(self.storageName() or APP, notification.title()),
-            notification.message()
+            notification.message(),
         ])
 
 
@@ -59,22 +61,25 @@ class RunWebPage(QWebEnginePage):
             [QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture, False]
         ]:
             self.settings().setAttribute(*webattr)
-        for feature in [
-            self.Feature.Notifications
-        ]:
-            self.setFeaturePermission(url, feature, self.PermissionPolicy.PermissionGrantedByUser)
+        for feature in [self.Feature.Notifications]:
+            self.setFeaturePermission(
+                url, feature, self.PermissionPolicy.PermissionGrantedByUser
+            )
         self.newWindowRequested.connect(self.onNewWindow)
+
     def onNewWindow(self, request):
         url = request.requestedUrl()
         log("window", url.url())
         if not self.openExternalUrl(url):
             self.setUrl(url)
+
     def openExternalUrl(self, url):
         if url.host() == self.url().host():
             return False
         log("xdg-open", url.url())
         subprocess.run(["xdg-open", url.url()])
         return True
+
     def acceptNavigationRequest(self, url, navigationType, isMainFrame):
         if navigationType == QWebEnginePage.NavigationType.NavigationTypeLinkClicked:
             log("click", url.url())
@@ -87,7 +92,7 @@ class RunWebView(QWebEngineView):
     def __init__(self, page):
         super().__init__()
         self.setPage(page)
-        self.setZoomFactor(float(os.getenv('RUNWEB_ZOOMFACTOR', 1.0)))
+        self.setZoomFactor(float(os.getenv("RUNWEB_ZOOMFACTOR", 1.0)))
         self.iconChanged.connect(lambda: self.setWindowIcon(self.icon()))
         self.titleChanged.connect(lambda: self.setWindowTitle(self.title()))
         page.profile().view = self
@@ -100,7 +105,8 @@ if __name__ == "__main__":
         dest="profile",
         metavar="NAME",
         default=None,
-        help="persistent profile name")
+        help="persistent profile name",
+    )
     parser.add_argument("url", metavar="URL")
     args = parser.parse_args()
     app = RunWebApp(args)
