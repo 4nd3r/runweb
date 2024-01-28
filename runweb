@@ -61,11 +61,21 @@ class RunWebPage(QWebEnginePage):
             [QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture, False]
         ]:
             self.settings().setAttribute(*webattr)
-        for feature in [self.Feature.Notifications]:
-            self.setFeaturePermission(
-                url, feature, self.PermissionPolicy.PermissionGrantedByUser
-            )
+        self.featurePermissionRequested.connect(self.onPermission)
         self.newWindowRequested.connect(self.onNewWindow)
+
+    def onPermission(self, url, feature):
+        if feature not in [
+            self.Feature.DesktopAudioVideoCapture,
+            self.Feature.DesktopVideoCapture,
+            self.Feature.MediaAudioCapture,
+            self.Feature.MediaAudioVideoCapture,
+            self.Feature.MediaVideoCapture,
+            self.Feature.Notifications
+        ]:
+            return False
+        log("perm", feature)
+        return self.setFeaturePermission(url, feature, self.PermissionPolicy.PermissionGrantedByUser)
 
     def onNewWindow(self, request):
         url = request.requestedUrl()
