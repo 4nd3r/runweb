@@ -55,26 +55,27 @@ class RunWebProfile(QWebEngineProfile):
 
 
 class RunWebPage(QWebEnginePage):
+    permittedFeatures = [
+        QWebEnginePage.Feature.DesktopAudioVideoCapture,
+        QWebEnginePage.Feature.DesktopVideoCapture,
+        QWebEnginePage.Feature.MediaAudioCapture,
+        QWebEnginePage.Feature.MediaAudioVideoCapture,
+        QWebEnginePage.Feature.MediaVideoCapture,
+        QWebEnginePage.Feature.Notifications
+    ]
+
     def __init__(self, profile, url):
         super().__init__(profile)
-        for webattr in [
-            [QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture, False]
-        ]:
+        for webattr in [[QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture, False]]:
             self.settings().setAttribute(*webattr)
+        for feature in self.permittedFeatures:
+            self.onPermission(url, feature)
         self.featurePermissionRequested.connect(self.onPermission)
         self.newWindowRequested.connect(self.onNewWindow)
 
     def onPermission(self, url, feature):
-        if feature not in [
-            self.Feature.DesktopAudioVideoCapture,
-            self.Feature.DesktopVideoCapture,
-            self.Feature.MediaAudioCapture,
-            self.Feature.MediaAudioVideoCapture,
-            self.Feature.MediaVideoCapture,
-            self.Feature.Notifications
-        ]:
+        if feature not in self.permittedFeatures:
             return False
-        log("perm", feature)
         return self.setFeaturePermission(url, feature, self.PermissionPolicy.PermissionGrantedByUser)
 
     def onNewWindow(self, request):
