@@ -3,6 +3,7 @@
 # pylint: disable=C0103,C0111,C0209,E0611,R0903,R1732,W0621
 
 import argparse
+import fcntl
 import os
 import signal
 import subprocess
@@ -120,6 +121,13 @@ if __name__ == "__main__":
     )
     parser.add_argument("url", metavar="URL")
     args = parser.parse_args()
+    if args.profile:
+        lock = "{}/runweb-{}.lock".format(os.getenv("XDG_RUNTIME_DIR"), args.profile)
+        try:
+            fcntl.lockf(os.open(lock, os.O_WRONLY | os.O_CREAT, 0o600), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except IOError:
+            log("{} is already running".format(args.profile))
+            sys.exit(1)
     app = RunWebApp(args)
     page = RunWebPage(app.profile, app.url)
     view = RunWebView(page)
