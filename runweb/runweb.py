@@ -42,7 +42,7 @@ class RunWebProfile(QWebEngineProfile):
     view = None
 
     def notify(self, notification):
-        if view:
+        if self.view:
             log("attention")
             QApplication.alert(self.view)
         log("notification")
