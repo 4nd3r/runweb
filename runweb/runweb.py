@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # pylint: disable=C0103,C0111,C0209,E0611,R0903,R1732,W0621
 
 import argparse
@@ -110,7 +108,7 @@ class RunWebView(QWebEngineView):
         page.profile().view = self
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(description="run website like an app")
     parser.add_argument(
         "-p",
