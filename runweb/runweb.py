@@ -75,7 +75,11 @@ class RunWebPage(QWebEnginePage):
     def onPermission(self, url, feature):
         if feature not in self.permittedFeatures:
             return False
-        return self.setFeaturePermission(url, feature, self.PermissionPolicy.PermissionGrantedByUser)
+        return self.setFeaturePermission(
+            url,
+            feature,
+            self.PermissionPolicy.PermissionGrantedByUser
+        )
 
     def onNewWindow(self, request):
         url = request.requestedUrl()
@@ -102,7 +106,7 @@ class RunWebView(QWebEngineView):
     def __init__(self, page):
         super().__init__()
         self.setPage(page)
-        self.setZoomFactor(float(os.getenv("RUNWEB_ZOOMFACTOR", 1.0)))
+        self.setZoomFactor(float(os.getenv("RUNWEB_ZOOMFACTOR", "1.0")))
         self.iconChanged.connect(lambda: self.setWindowIcon(self.icon()))
         self.titleChanged.connect(lambda: self.setWindowTitle(self.title()))
         page.profile().view = self
@@ -122,7 +126,10 @@ def main():
     if args.profile:
         lock = "{}/runweb-{}.lock".format(os.getenv("XDG_RUNTIME_DIR"), args.profile)
         try:
-            fcntl.lockf(os.open(lock, os.O_WRONLY | os.O_CREAT, 0o600), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            fcntl.lockf(
+                os.open(lock, os.O_WRONLY | os.O_CREAT, 0o600),
+                fcntl.LOCK_EX | fcntl.LOCK_NB
+            )
         except IOError:
             log("{} is already running".format(args.profile))
             sys.exit(1)
