@@ -131,4 +131,4 @@ def main():
     view = RunWebView(page)
     page.setUrl(app.url)
     view.showMaximized()
-    sys.exit(app.exec())
+    return app.exec()
