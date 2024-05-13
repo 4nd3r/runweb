@@ -45,12 +45,13 @@ class RunWebProfile(QWebEngineProfile):
         if self.view:
             log("attention")
             QApplication.alert(self.view)
-        log("notification")
-        subprocess.Popen([
-            "notify-send",
-            "{}: {}".format(self.storageName() or APP, notification.title()),
-            notification.message(),
-        ])
+        if os.getenv("RUNWEB_NOTIFICATIONS", "1") == "1":
+            log("notification")
+            subprocess.Popen([
+                "notify-send",
+                "{}: {}".format(self.storageName() or APP, notification.title()),
+                notification.message(),
+            ])
 
 
 class RunWebPage(QWebEnginePage):
