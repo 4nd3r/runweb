@@ -26,8 +26,10 @@ class RunWebApp(QApplication):
         self.setApplicationName(APP)
         signal.signal(signal.SIGINT, signal.SIG_DFL)
         self.profile = RunWebProfile(args.profile)
-        self.url = QUrl(args.url)
-        log("url", args.url)
+        self.urls = []
+        for url in args.urls:
+            self.urls.append(QUrl(url))
+            log("url", url)
 
 
 class RunWebProfile(QWebEngineProfile):
@@ -55,6 +57,10 @@ class RunWebProfile(QWebEngineProfile):
 
 
 class RunWebPage(QWebEnginePage):
+    initialUrl = None
+
+    permittedHosts = []
+
     permittedFeatures = [
         QWebEnginePage.Feature.DesktopAudioVideoCapture,
         QWebEnginePage.Feature.DesktopVideoCapture,
@@ -64,12 +70,16 @@ class RunWebPage(QWebEnginePage):
         QWebEnginePage.Feature.Notifications
     ]
 
-    def __init__(self, profile, url):
+    def __init__(self, profile, urls):
         super().__init__(profile)
         for webattr in [[QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture, False]]:
             self.settings().setAttribute(*webattr)
-        for feature in self.permittedFeatures:
-            self.onPermission(url, feature)
+        for url in urls:
+            if self.initialUrl is None:
+                self.initialUrl = url
+            self.permittedHosts.append(url.host())
+            for feature in self.permittedFeatures:
+                self.onPermission(url, feature)
         self.featurePermissionRequested.connect(self.onPermission)
         self.newWindowRequested.connect(self.onNewWindow)
 
@@ -88,8 +98,13 @@ class RunWebPage(QWebEnginePage):
         if not self.openExternalUrl(url):
             self.setUrl(url)
 
+    def setUrl(self, url=None):
+        if url is None:
+            url = self.initialUrl
+        super().setUrl(url)
+
     def openExternalUrl(self, url):
-        if url.host() == self.url().host():
+        if url.host() in self.permittedHosts:
             return False
         log("xdg-open", url.url())
         subprocess.Popen(["xdg-open", url.url()])
@@ -122,7 +137,12 @@ def main():
         default=None,
         help="persistent profile name",
     )
-    parser.add_argument("url", metavar="URL")
+    parser.add_argument(
+        "urls",
+        nargs="+",
+        metavar="URL",
+        help="first URL is initial, others are permitted when navigating",
+    )
     args = parser.parse_args()
     if args.profile:
         lock = "{}/runweb-{}.lock".format(os.getenv("XDG_RUNTIME_DIR"), args.profile)
@@ -135,8 +155,8 @@ def main():
             log("{} is already running".format(args.profile))
             sys.exit(1)
     app = RunWebApp(args)
-    page = RunWebPage(app.profile, app.url)
+    page = RunWebPage(app.profile, app.urls)
     view = RunWebView(page)
-    page.setUrl(app.url)
+    page.setUrl()
     view.showMaximized()
     return app.exec()

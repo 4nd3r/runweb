@@ -26,12 +26,12 @@ $ ln -sf "$PWD/.venv/bin/runweb" "$HOME/.local/bin/runweb"
 
 ```
 $ runweb -h
-usage: runweb [-h] [-p NAME] URL
+usage: runweb [-h] [-p NAME] URL [URL ...]
 
 run website like an app
 
 positional arguments:
-  URL
+  URL         first URL is initial, others are permitted when navigating
 
 options:
   -h, --help  show this help message and exit
