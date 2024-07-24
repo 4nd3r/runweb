@@ -79,6 +79,8 @@ class RunWebPage(QWebEnginePage):
     def __init__(self, app):
         super().__init__(app.profile)
         for url in app.args.urls:
+            if not url.startswith("https://") and not url.startswith("http://"):
+                url = "https://{}".format(url)
             log("url", url)
             url = QUrl(url)
             if self.initialUrl is None:
