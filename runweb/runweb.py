@@ -59,11 +59,15 @@ class RunWebProfile(QWebEngineProfile):
         if os.getenv("RUNWEB_NOTIFICATIONS", "1") == "1":
             log("notify")
             try:
-                subprocess.Popen([
-                    "notify-send",
-                    "{}: {}".format(self.storageName() or APP, notification.title()),
-                    notification.message(),
-                ])
+                subprocess.Popen(
+                    [
+                        "notify-send",
+                        "{}: {}".format(
+                            self.storageName() or APP, notification.title()
+                        ),
+                        notification.message(),
+                    ]
+                )
             except Exception:
                 pass
 
@@ -77,7 +81,7 @@ class RunWebPage(QWebEnginePage):
         QWebEnginePage.Feature.MediaAudioCapture,
         QWebEnginePage.Feature.MediaAudioVideoCapture,
         QWebEnginePage.Feature.MediaVideoCapture,
-        QWebEnginePage.Feature.Notifications
+        QWebEnginePage.Feature.Notifications,
     ]
     webAttributes = [
         [QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture, False]
@@ -104,9 +108,7 @@ class RunWebPage(QWebEnginePage):
         if feature not in self.permittedFeatures:
             return False
         return self.setFeaturePermission(
-            url,
-            feature,
-            self.PermissionPolicy.PermissionGrantedByUser
+            url, feature, self.PermissionPolicy.PermissionGrantedByUser
         )
 
     def onNewWindow(self, request):
@@ -165,7 +167,7 @@ def main():
         try:
             fcntl.lockf(
                 os.open(lock, os.O_WRONLY | os.O_CREAT, 0o600),
-                fcntl.LOCK_EX | fcntl.LOCK_NB
+                fcntl.LOCK_EX | fcntl.LOCK_NB,
             )
         except IOError:
             log("{} is already running".format(args.profile))
