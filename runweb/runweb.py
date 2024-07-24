@@ -1,9 +1,9 @@
-# pylint: disable=C0103,C0111,C0209,E0611,R0903,R1732,W0621
+# pylint: disable=C0103,C0111,C0209,E0611,R0903,R1732,W0621,W0718
 
 import argparse
 import fcntl
 import os
-import signal
+#import signal
 import subprocess
 import sys
 

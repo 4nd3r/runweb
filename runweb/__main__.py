@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# pylint: disable=C0114
+
 import sys
 
 try:
