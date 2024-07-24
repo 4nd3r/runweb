@@ -27,9 +27,9 @@ class RunWebApp(QApplication):
     view = None
 
     def __init__(self, args):
-        super().__init__([args.profile or "otr", APP])
-        self.setApplicationName(APP)
         self.args = args
+        super().__init__([self.args.profile or "otr", APP])
+        self.setApplicationName(APP)
         self.profile = RunWebProfile(self)
         self.page = RunWebPage(self)
         self.view = RunWebView(self)
@@ -40,25 +40,32 @@ class RunWebApp(QApplication):
 
 
 class RunWebProfile(QWebEngineProfile):
+    app = None
+
     def __init__(self, app):
-        super().__init__(app.args.profile)
-        log("profile", app.args.profile)
+        self.app = app
+        super().__init__(self.app.args.profile)
+        log("profile", self.app.args.profile)
         log("otr", self.isOffTheRecord())
         log("cache", self.cachePath() or None)
         log("data", self.persistentStoragePath() or None)
         self.setNotificationPresenter(self.notify)
 
     def notify(self, notification):
-        if self.view:
-            log("attention")
-            QApplication.alert(self.view)
+        try:
+            QApplication.alert(self.app.view)
+        except Exception:
+            pass
         if os.getenv("RUNWEB_NOTIFICATIONS", "1") == "1":
-            log("notification")
-            subprocess.Popen([
-                "notify-send",
-                "{}: {}".format(self.storageName() or APP, notification.title()),
-                notification.message(),
-            ])
+            log("notify")
+            try:
+                subprocess.Popen([
+                    "notify-send",
+                    "{}: {}".format(self.storageName() or APP, notification.title()),
+                    notification.message(),
+                ])
+            except Exception:
+                pass
 
 
 class RunWebPage(QWebEnginePage):

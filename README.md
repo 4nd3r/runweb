@@ -31,7 +31,7 @@ usage: runweb [-h] [-p NAME] URL [URL ...]
 run website like an app
 
 positional arguments:
-  URL         first URL is initial, others are permitted when navigating
+  URL         first URL is initial, other (hosts) are permitted when navigating
 
 options:
   -h, --help  show this help message and exit
