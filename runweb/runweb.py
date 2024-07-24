@@ -21,27 +21,32 @@ def log(*log):
 
 
 class RunWebApp(QApplication):
+    args = None
+    profile = None
+    page = None
+    view = None
+
     def __init__(self, args):
         super().__init__([args.profile or "otr", APP])
         self.setApplicationName(APP)
-        signal.signal(signal.SIGINT, signal.SIG_DFL)
-        self.profile = RunWebProfile(args.profile)
-        self.urls = []
-        for url in args.urls:
-            self.urls.append(QUrl(url))
-            log("url", url)
+        self.args = args
+        self.profile = RunWebProfile(self)
+        self.page = RunWebPage(self)
+        self.view = RunWebView(self)
+        self.page.setUrl()
+        self.view.showMaximized()
+        # why? I have no memory of this
+        #signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 
 class RunWebProfile(QWebEngineProfile):
-    def __init__(self, name):
-        super().__init__(name)
-        log("profile", name)
+    def __init__(self, app):
+        super().__init__(app.args.profile)
+        log("profile", app.args.profile)
         log("otr", self.isOffTheRecord())
         log("cache", self.cachePath() or None)
         log("data", self.persistentStoragePath() or None)
         self.setNotificationPresenter(self.notify)
-
-    view = None
 
     def notify(self, notification):
         if self.view:
@@ -58,9 +63,7 @@ class RunWebProfile(QWebEngineProfile):
 
 class RunWebPage(QWebEnginePage):
     initialUrl = None
-
     permittedHosts = []
-
     permittedFeatures = [
         QWebEnginePage.Feature.DesktopAudioVideoCapture,
         QWebEnginePage.Feature.DesktopVideoCapture,
@@ -69,17 +72,22 @@ class RunWebPage(QWebEnginePage):
         QWebEnginePage.Feature.MediaVideoCapture,
         QWebEnginePage.Feature.Notifications
     ]
+    webAttributes = [
+        [QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture, False]
+    ]
 
-    def __init__(self, profile, urls):
-        super().__init__(profile)
-        for webattr in [[QWebEngineSettings.WebAttribute.PlaybackRequiresUserGesture, False]]:
-            self.settings().setAttribute(*webattr)
-        for url in urls:
+    def __init__(self, app):
+        super().__init__(app.profile)
+        for url in app.args.urls:
+            log("url", url)
+            url = QUrl(url)
             if self.initialUrl is None:
                 self.initialUrl = url
             self.permittedHosts.append(url.host())
             for feature in self.permittedFeatures:
                 self.onPermission(url, feature)
+        for webattribute in self.webAttributes:
+            self.settings().setAttribute(*webattribute)
         self.featurePermissionRequested.connect(self.onPermission)
         self.newWindowRequested.connect(self.onNewWindow)
 
@@ -119,13 +127,12 @@ class RunWebPage(QWebEnginePage):
 
 
 class RunWebView(QWebEngineView):
-    def __init__(self, page):
+    def __init__(self, app):
         super().__init__()
-        self.setPage(page)
+        self.setPage(app.page)
         self.setZoomFactor(float(os.getenv("RUNWEB_ZOOMFACTOR", "1.0")))
         self.iconChanged.connect(lambda: self.setWindowIcon(self.icon()))
         self.titleChanged.connect(lambda: self.setWindowTitle(self.title()))
-        page.profile().view = self
 
 
 def main():
@@ -141,7 +148,7 @@ def main():
         "urls",
         nargs="+",
         metavar="URL",
-        help="first URL is initial, others are permitted when navigating",
+        help="first URL is initial, other (hosts) are permitted when navigating",
     )
     args = parser.parse_args()
     if args.profile:
@@ -155,8 +162,4 @@ def main():
             log("{} is already running".format(args.profile))
             sys.exit(1)
     app = RunWebApp(args)
-    page = RunWebPage(app.profile, app.urls)
-    view = RunWebView(page)
-    page.setUrl()
-    view.showMaximized()
     return app.exec()
